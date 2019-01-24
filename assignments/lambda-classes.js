@@ -38,7 +38,7 @@ class Student extends Person {
     }     
     listsSubjects() {
         let subjects = this.favSubjects;
-        subjects.map( subject => console.log(subject));
+       return subjects.map( subject => (subject));
     }
     PRAssignment(subject) {
         return `${this.name} has submitted a PR for ${subject}.`;
@@ -173,7 +173,7 @@ console.log(mcgonagall.grade(hermione, "Transfiguration"));
 console.log(harrypotter.speak());
 console.log(ron.speak());
 console.log(hermione.speak());
-console.log(hermione.listsSubjects());
+console.log(hermione.listsSubjects()[0]);
 console.log(ron.PRAssignment("Potions"));
 console.log(harrypotter.sprintChallenge("Divination"));
 console.log(percy.speak());
