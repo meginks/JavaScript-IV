@@ -6,47 +6,29 @@ Prototype Refactor
 
 2. Your goal is to refactor all of this code to use ES6 Classes. The console.log() statements should still return what is expected of them.
 
-*/
+*/ 
+/* my code from js iii is in comments */ 
 
-/*
-  Object oriented design is commonly used in video games.  For this part of the assignment you will be implementing several constructor functions with their correct inheritance hierarchy.
-
-  In this file you will be creating three constructor functions: GameObject, CharacterStats, Humanoid.  
-
-  At the bottom of this file are 3 objects that all end up inheriting from Humanoid.  Use the objects at the bottom of the page to test your constructor functions.
-  
-  Each constructor function has unique properties and methods that are defined in their block comments below:
-*/
-console.log("this is where prototypes.js starts");
-/*
-  === GameObject ===
-  * createdAt
-  * dimensions (These represent the character's size in the video game)
-  * destroy() // prototype method -> returns the string: 'Object was removed from the game.'
-*/
-
-function GameObject (properties) {
+/*** function GameObject (properties) {
 this.createdAt = properties.createdAt;
 this.dimensions = properties.dimensions;
   this.destroy = function () {
     console.log(`${this.name} was removed from the game`);
     }
+}; ***/ 
+
+class GameObject {
+    constructor(properties) {
+    this.createdAt = properties.createdAt;
+    this.dimensions = properties.dimensions;
+    }
+    destroy() {
+        return `${this.name} was removed from the game.`;
+    }
 };
 
-/*
-GameObject.prototype.destroy = function() {
-  console.log('${this.name} was removed from the game.');
-}
 
-/*
-  === CharacterStats ===
-  * healthPoints
-  * name
-  * takeDamage() // prototype method -> returns the string '<object name> took damage.'
-  * should inherit destroy() from GameObject's prototype
-*/ 
-
-function CharacterStats (attributes) {
+/***  function CharacterStats (attributes) {
   this.healthPoints = attributes.healthPoints;
   this.name = attributes.name;
 };
@@ -54,18 +36,22 @@ function CharacterStats (attributes) {
 CharacterStats.prototype.takeDamage = function() {
   console.log(`${this.name} took damage`);
 }
+**/
+/** have to change this to a child for inheritance pattern to work */ 
 
-/*
-  === Humanoid (Having an appearance or character resembling that of a human.) ===
-  * team
-  * weapons
-  * language
-  * greet() // prototype method -> returns the string '<object name> offers a greeting in <object language>.'
-  * should inherit destroy() from GameObject through CharacterStats
-  * should inherit takeDamage() from CharacterStats
-*/
- 
-function Humanoid (attributes) {
+class CharacterStats extends GameObject {
+    constructor(charStatsAttrs) {
+        super(charStatsAttrs);
+        this.healthPoints = charStatsAttrs.healthPoints;
+        this.name = charStatsAttrs.name;
+    }
+    takeDamage() {
+        return `${this.name} took damage`;
+    }
+} 
+
+
+/*** function Humanoid (attributes) {
   GameObject.call(this, attributes);
   CharacterStats.call(this, attributes);
   this.team = attributes.team;
@@ -78,16 +64,21 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
 
 Humanoid.prototype.greet = function () {
   console.log(`${this.name} offers a greeting in ${this.language}`);
+} 
+**/ 
+
+class Humanoid extends CharacterStats {
+    constructor(humanoidAttrs) {
+        super(humanoidAttrs);
+        this.team = humanoidAttrs.team;
+        this.weapons = humanoidAttrs.weapons;
+        this.language = humanoidAttrs.language;
+    } 
+    greet() {
+        return `${this.name} offers a greeting in ${this.language}`;
+    }
 }
 
-
-/*
-  * Inheritance chain: GameObject -> CharacterStats -> Humanoid
-  * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
-  * Instances of CharacterStats should have all of the same properties as GameObject.
-*/
-
-// Test you work by un-commenting these 3 objects and the list of console logs below:
 
 
   const mage = new Humanoid({
@@ -157,7 +148,7 @@ Humanoid.prototype.greet = function () {
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
-
+/*** 
   function Villain (attributes) {
     this.evilName = attributes.evilName;
     this.nickName = attributes.nickName;
@@ -173,6 +164,26 @@ Humanoid.prototype.greet = function () {
       }
     }
   };
+***/ 
+
+class Villain extends Humanoid {
+    constructor(villainAttrs) {
+        super(villainAttrs); 
+        this.evilName = villainAttrs.evilName;
+        this.nickName = villainAttrs.nickName;
+    }
+    avadaKedavra(victim) {
+        if (victim.healthPoints > 0) {
+            victim.healthPoints -= 1; 
+            return `${victim.name} now has ${victim.healthPoints} health points`;
+          } if (victim.healthPoints === 0) {
+            victim.destroy();
+          } else {
+            return `The spell didn't work! ${victim.name} is still alive, but wounded!`;
+          }
+    }
+};
+
 
   const voldemort = new Villain({
     name: 'Tom Riddle',
@@ -183,8 +194,7 @@ Humanoid.prototype.greet = function () {
     weapons: ['wand'] 
   });
 
-  console.log(voldemort);
-
+/** 
   function Hero (attributes) {
     Humanoid.call(this, attributes);
     this.goodName = attributes.goodName;
@@ -193,20 +203,31 @@ Humanoid.prototype.greet = function () {
         console.log(`${subject.evilName} drops his ${subject.weapons}!`);
     };
   } 
+  **/ 
+class Hero extends Humanoid {
+    constructor(heroAttrs) {
+        super(heroAttrs);
+        this.goodName = heroAttrs.goodName;
+        this.nickName = heroAttrs.nickName;
+    }
+    expelliarmus(subject) { 
+        return `${subject.evilName} drops his ${subject.weapons}!`;
+    }
+};
 
   const harry = new Hero({
     name: 'Harry Potter', 
-    goodName: 'Harry', 
-    nickName: 'the Chosen One', 
+    goodName: 'the Chosen One', 
+    nickName: 'the boy who lived', 
     healthPoints: 100, 
     team: 'Griffindor',
     language: ['Parseltongue', 'English'],
     weapons: ['wand'], 
-  })
+  });
 
-  console.log(harry); 
+  
 
 
-  voldemort.avadaKedavra(harry);
+  console.log(voldemort.avadaKedavra(harry));
 
-  harry.expelliarmus(voldemort);
+  console.log(harry.expelliarmus(voldemort));
