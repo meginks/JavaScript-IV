@@ -27,7 +27,11 @@ class Instructor extends Person {
     grade(student, subject) {
         return `${student.name} receives a perfect score in ${subject}.`;
     }
-}
+    assignGrade(student, min, max){
+        student.grade = Math.random() * (max-min) + min; 
+        return `${this.name} has given ${student.name} a grade of ${student.grade}`;
+    };
+};
 
 class Student extends Person {
     constructor(studentAttrs) {
@@ -35,6 +39,7 @@ class Student extends Person {
         this.previousBackground = studentAttrs.previousBackground;
         this.className = studentAttrs.className;
         this.favSubjects = studentAttrs.favSubjects; // make array in instances
+        this.grade = studentAttrs.grade;
     }     
     listsSubjects() {
         let subjects = this.favSubjects;
@@ -46,8 +51,16 @@ class Student extends Person {
     sprintChallenge(subject) {
         return `${this.name} has begun sprint challenge on ${subject}.`;
     }
-
-}
+    graduate() {
+        if (this.grade >= 90) {
+            return `${this.name} graduated with honors! Wow!`;
+        }
+        if (this.grade >= 70) {
+            return `${this.name} is amazing and graduated!`;
+        } else {
+           return  `${this.name} can't graduate. Time to hit the books!`;
+        }
+    }}
 
 class ProjectManager extends Instructor {
     constructor(pmAttrs) {
@@ -181,3 +194,13 @@ console.log(percy.standUp("griffindor_firstyears"));
 console.log(lucius.standUp("slytherin_firstyears"));
 console.log(percy.debugsCode(ron, "Potions"));
 
+// STRETCH TESTS 
+
+
+console.log(snape.assignGrade(ron, 1, 50));
+console.log(mcgonagall.assignGrade(hermione, 99, 100));
+
+mcgonagall.assignGrade(hermione, 90, 100); 
+console.log(hermione);
+console.log(hermione.graduate());
+console.log(ron.graduate());
