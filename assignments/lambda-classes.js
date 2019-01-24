@@ -37,7 +37,8 @@ class Student extends Person {
         this.favSubjects = studentAttrs.favSubjects; // make array in instances
     }     
     listsSubjects() {
-        return `${this.favSubjects}`.toString(" ");
+        let subjects = this.favSubjects;
+        subjects.map( subject => console.log(subject));
     }
     PRAssignment(subject) {
         return `${this.name} has submitted a PR for ${subject}.`;
@@ -132,7 +133,7 @@ const hermione = new Student({
     location: "Hogwarts",
     gender: "female",
     previousBackground: "Parents are muggle dentists",
-    favSubjects: ["Transfiguration", "Potions", "Divination", "Defense Against the Dark Arts", "Literally everything"]
+    favSubjects: ["Transfiguration", "Potions", "Divination", "Defense Against the Dark Arts", "Literally everything"],
 })
 
 /** Project Manager Objects **/
